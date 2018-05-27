@@ -22,13 +22,13 @@ double rpm_out_l=0;
 int readypin = 13; 
 String inString = "";    // string to hold Serial input
 int idlespeed=0;
-int maxspeed = 150;
+int maxspeed = 200;
 int diff = 25; // launch speed difference threshold
 
 int movmean=10;
 
 int motorpinr=9;
-int motorpinl=11;
+int motorpinl=10;
 
 double Kp=1, Ki=0.001 ,Kd =0;
 
