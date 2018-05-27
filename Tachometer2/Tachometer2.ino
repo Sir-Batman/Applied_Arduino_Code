@@ -21,14 +21,14 @@ double rpm_out_r=0;
 double rpm_out_l=0;
 int readypin = 13; 
 String inString = "";    // string to hold Serial input
-int idlespeed=0;
-int maxspeed = 200;
+int idlespeed=50;
+int maxspeed = 230;
 int diff = 25; // launch speed difference threshold
 
 int movmean=10;
 
-int motorpinr=9;
-int motorpinl=10;
+int motorpinr=3;
+int motorpinl=9;
 
 double Kp=1, Ki=0.001 ,Kd =0;
 
@@ -46,6 +46,7 @@ void setup() {
 	l_PID.SetMode(AUTOMATIC);
 	TCCR0B = TCCR0B & B11111000 | B00000001;    // set timer 0 divisor to     1 for PWM frequency of 62500.00 Hz
 	TCCR1B = TCCR1B & B11111000 | B00000001;    // set timer 1 divisor to     1 for PWM frequency of 31372.55 Hz
+	TCCR2B = TCCR1B & B11111000 | B00000001;    // set timer 1 divisor to     1 for PWM frequency of 31372.55 Hz
 	//setPwmFrequency(motorpinr, 1);
 	//setPwmFrequency(motorpinl, 1);
 
