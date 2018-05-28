@@ -90,13 +90,13 @@ void loop()
 	}
 	else if (P2_VAL == HIGH && P1_VAL == LOW)
 	{
-		setspeed_r = 1900;
-		setspeed_l = 1900;
+		setspeed_r = 2100;
+		setspeed_l = 2100;
 	}
 	else// (P2_VAL == HIGH && P1_VAL == HIGH)
 	{
-		setspeed_r = 2200;
-		setspeed_l = 2200;
+		setspeed_r = 2400;
+		setspeed_l = 2400;
 	}
 		
 	// Read serial input from serial terminal (TODO NOT WORKING)
