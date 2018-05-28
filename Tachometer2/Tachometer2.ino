@@ -27,8 +27,16 @@ int diff = 25; // launch speed difference threshold
 
 int movmean=10;
 
-int motorpinr=3;
-int motorpinl=9;
+int motorpinr=9;
+int motorpinl=10;
+
+int IN_COMM_P1 = 2;
+int IN_COMM_P2 = 3;
+int IN_COMM_P3 = 4;
+int P1_VAL = 0;
+int P2_VAL = 0;
+int P3_VAL = 0;
+
 
 double Kp=1, Ki=0.001 ,Kd =0;
 
@@ -64,9 +72,8 @@ void setup() {
 	Serial.begin(115200);
 	pinMode(motorpinr, OUTPUT);
 	pinMode(motorpinl, OUTPUT);
-	//pinMode(r_sensor,INPUT);
-	//pinMode(l_sensor,INPUT);
-	pinMode(readypin, OUTPUT);
+	pinMode(r_sensor,INPUT);
+	pinMode(l_sensor,INPUT);
 	r_PID.SetMode(AUTOMATIC);
 	l_PID.SetMode(AUTOMATIC);
 	TCCR0B = TCCR0B & B11111000 | B00000001;    // set timer 0 divisor to     1 for PWM frequency of 62500.00 Hz
@@ -77,9 +84,46 @@ void setup() {
 
 	rpm_out_r=0;
 	rpm_out_l=0;
+	/* Set up basic binary communication pins */
+	pinMode(readypin, OUTPUT);
+	pinMode(IN_COMM_P1, INPUT);
+	pinMode(IN_COMM_P2, INPUT);
+	pinMode(IN_COMM_P3, INPUT);
 }
 
-void loop() {
+void loop()
+{
+	/* Read the desired speed from the input pins */
+	P1_VAL = digitalRead(IN_COMM_P1);
+	P2_VAL = digitalRead(IN_COMM_P2);
+	P3_VAL = digitalRead(IN_COMM_P3);
+	/* P2 P1
+	    0  0 -- zone 1, soft throw
+	    0  1 -- zone 2, medium throw
+	    1  0 -- zone 3, hard throw
+	    1  1 -- competitive throw
+	*/
+	if (P2_VAL == LOW && P1_VAL == LOW)
+	{
+		setspeed_r = 1200;
+		setspeed_l = 1200;
+	}
+	else if (P2_VAL == LOW && P1_VAL == HIGH)
+	{
+		setspeed_r = 1600;
+		setspeed_l = 1600;
+	}
+	else if (P2_VAL == HIGH && P1_VAL == LOW)
+	{
+		setspeed_r = 1900;
+		setspeed_l = 1900;
+	}
+	else (P2_VAL == HIGH && P1_VAL == HIGH)
+	{
+		setspeed_r = 2200;
+		setspeed_l = 2200;
+	}
+		
 	// Read serial input from serial terminal (TODO NOT WORKING)
 	while (Serial.available()) {
 		int inChar = Serial.read();
