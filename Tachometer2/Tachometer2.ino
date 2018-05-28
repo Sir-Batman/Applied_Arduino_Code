@@ -93,7 +93,7 @@ void loop()
 		setspeed_r = 1900;
 		setspeed_l = 1900;
 	}
-	else (P2_VAL == HIGH && P1_VAL == HIGH)
+	else// (P2_VAL == HIGH && P1_VAL == HIGH)
 	{
 		setspeed_r = 2200;
 		setspeed_l = 2200;
