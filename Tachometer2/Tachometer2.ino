@@ -43,31 +43,6 @@ double Kp=1, Ki=0.001 ,Kd =0;
 PID r_PID(&rpm_out_r, &r_motor_in, &setspeed_r, Kp, Ki, Kd, DIRECT);
 PID l_PID(&rpm_out_l, &l_motor_in, &setspeed_l, Kp, Ki, Kd, DIRECT);
 
-/* TODO write interrupt functions */
-void right_sensor_ISR()
-{
-	right_sensor_triggered = true;
-/*
-	rpm_r = (1/((millis()-time_trip_r)/1000))*600*6;
-	//r_status = true;
-	time_trip_r = millis();
-	avgbuffer_r += rpm_r;
-	avgcounter_r++;
-*/
-}
-
-void left_sensor_ISR()
-{
-	left_sensor_triggered = true ;
-/*
-	rpm_l = (1/((millis()-time_trip_l)/1000))*600*6; 
-	//l_status = true;
-	time_trip_l = millis();
-	avgbuffer_l += rpm_l;
-	avgcounter_l++;
-*/
-}
-
 void setup() {  
 	Serial.begin(115200);
 	pinMode(motorpinr, OUTPUT);
@@ -144,10 +119,9 @@ void loop()
 			inString = "";  // clear the string for new input:
 		}
 	}
-	/* BEGIN */
-	//int rsread = analogRead(r_sensor);
-	//int lsread = analogRead(l_sensor);
 
+	int rsread=analogRead(r_sensor);
+	int lsread=analogRead(l_sensor);
 
 	//check if right sensor is seeing white for the first time in a rotation
 	if ((rsread<threshold) && (r_status==false))
@@ -177,7 +151,6 @@ void loop()
 	{
 		l_status=false;
 	}
-	/* END */
 
 	if (avgcounter_r == movmean || avgcounter_l == movmean)
 	{ 
@@ -231,7 +204,7 @@ void loop()
 	if((abs(rpm_out_l - setspeed_l) < diff) && (abs(rpm_out_r - setspeed_r) < diff))
 	{
 		digitalWrite(readypin,HIGH);
-		//Serial.println("Ready to launch");
+		Serial.println("Ready to launch");
 		digitalWrite(readypin,LOW);
 	}
 }
